@@ -4,7 +4,7 @@ library(readr)
 library(dplyr)
 
 # Read the tcga data
-Full_mut_exp_data_TCGA <- read_csv("/Users/benitaariaslara/Desktop/lsc586/R/TCGA/full_mut_exp_data_TCGA.csv")
+Full_mut_exp_data_TCGA <- read_csv("...")
 
 # Convert to numeric
 Full_mut_exp_data_TCGA <- Full_mut_exp_data_TCGA %>%
