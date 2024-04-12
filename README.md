@@ -26,6 +26,30 @@ Utilizing linear regression analysis via the `lm` function in R, we identified a
 
 # - NOTES -
 
+# - Source -
+
+These files are derived from the following virtual study on the cBioPortal for Cancer Genomics:
+
+- **Study Name**: Prostate Adenocarcinoma (TCGA, Cell 2015)
+- **cBioPortal Study ID**: `prad_tcga_pub`
+- **cBioPortal URL**: [https://www.cbioportal.org/study/summary?id=prad_tcga_pub](https://www.cbioportal.org/study/summary?id=prad_tcga_pub)
+
+# - Intended Use -
+
+These files are intended for research purposes, to facilitate the analysis of genetic alterations in prostate cancer patients and their potential impact on prognosis, treatment outcomes, or any other clinical correlation. Researchers might use these files to segregate patient data based on BRCA1/BRCA2 alteration status before conducting further genetic, molecular, or clinical analyses.
+
+# - Citation -
+
+When using these files for academic or research purposes, please cite the original study as follows:
+
+- Cancer Genome Atlas Research Network (2015). The Molecular Taxonomy of Primary Prostate Cancer. Cell, 163(4), 1011–1025. https://doi.org/10.1016/j.cell.2015.10.025
+
+Additionally, acknowledge the use of cBioPortal for sourcing patient data.
+
+# - Disclaimer - 
+
+The meta file and the associated patient ID lists do not contain any personal health information (PHI) or any data that can directly identify an individual patient. All data has been de-identified in accordance with applicable laws and regulations. The user assumes all responsibility for the ethical and legal use of this data.
+
 # - BUG FIXES -
 
 
