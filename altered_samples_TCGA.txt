@@ -1,0 +1,14 @@
+prad_tcga_pub:TCGA-HC-8216-01
+prad_tcga_pub:TCGA-G9-7521-01
+prad_tcga_pub:TCGA-KK-A7AV-01
+prad_tcga_pub:TCGA-HC-A4ZV-01
+prad_tcga_pub:TCGA-EJ-7125-01
+prad_tcga_pub:TCGA-J9-A8CP-01
+prad_tcga_pub:TCGA-XQ-A8TA-01
+prad_tcga_pub:TCGA-J9-A8CM-01
+prad_tcga_pub:TCGA-HC-7231-01
+prad_tcga_pub:TCGA-EJ-A65F-01
+prad_tcga_pub:TCGA-EJ-7328-01
+prad_tcga_pub:TCGA-CH-5789-01
+prad_tcga_pub:TCGA-CH-5764-01
+prad_tcga_pub:TCGA-CH-5754-01
