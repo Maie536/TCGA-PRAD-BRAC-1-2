@@ -6,8 +6,8 @@ library(ggplot2)
 #______________________Step 1a: Read in clinical and patient data files_______________________________
 
 # Read the txt file of data_clinical_patient and data_clinical_sample for each data set
-clin_data_TCGA <- read_tsv("/Users/benitaariaslara/Desktop/lsc586/R/TCGA/data/data_clinical_patient.txt")
-sample_data_TCGA <- read_tsv("/Users/benitaariaslara/Desktop/lsc586/R/TCGA/data/data_clinical_sample.txt")
+clin_data_TCGA <- read_tsv(".../data_clinical_patient.txt")
+sample_data_TCGA <- read_tsv(".../data_clinical_sample.txt")
 
 #________________________Step 1b: Clean up data to merge clinical files____________________________
 
@@ -32,8 +32,8 @@ merged_data_TCGA <- merged_data_TCGA[, selected_columns_TCGA]
 #_____________________________Step 1c: Read mutation and expression data____________________________________
 
 # Read the txt file of z-scores and raw expression values
-raw_data_TCGA <- read_tsv("/Users/benitaariaslara/Desktop/lsc586/R/TCGA/data/data_mrna_seq_v2_rsem.txt")
-data_mutations_TCGA <- read_tsv("/Users/benitaariaslara/Desktop/lsc586/R/TCGA/data/data_mutations.txt")
+raw_data_TCGA <- read_tsv(".../data_mrna_seq_v2_rsem.txt")
+data_mutations_TCGA <- read_tsv(".../data_mutations.txt")
 
 # extract sample ID and Hugo Symbol from mutations table
 columns_mutations <- c("Hugo_Symbol", "Tumor_Sample_Barcode", "Mutation_Status","Variant_Classification")
@@ -73,7 +73,7 @@ brca2_mut_data <- data_mutations_TCGA %>%
   filter(Hugo_Symbol %in% c("BRCA2"))
 
 # Read in file with Altered Patient IDs
-altered_data_TCGA <- read_delim("/Users/benitaariaslara/Desktop/lsc586/R/TCGA/altered_samples_TCGA.txt", delim = ":", col_names = FALSE)
+altered_data_TCGA <- read_delim(".../altered_samples_TCGA.txt", delim = ":", col_names = FALSE)
 
 # Filter expression data using altered IDs
 brca1_data <- filter(brca1_data, `SAMPLE_ID` %in% altered_data_TCGA$X2)
@@ -107,7 +107,7 @@ Full_mut_data_TCGA <- bind_rows(
 )
 
 # write files into folders
-write_csv(Full_mut_data_TCGA, "/Users/benitaariaslara/Desktop/lsc586/R/TCGA/Full_mut_data_TCGA.csv")
+write_csv(Full_mut_data_TCGA, ".../Full_mut_data_TCGA.csv")
 
 # merge brca1/2_data_ with clinical for unaltered
 merged_brca1_data_ <- merge(merged_data_TCGA, brca1_data_, by = "SAMPLE_ID")
@@ -116,7 +116,7 @@ merged_brca2_data_ <- merge(merged_data_TCGA, brca2_data_, by = "SAMPLE_ID")
 #_________________Step 3a: Filter by altered and unaltered, obtained from cBioPortal______________
 
 # Read in file with unaltered Patient IDs
-unaltered_data_TCGA <- read_delim("/Users/benitaariaslara/Desktop/lsc586/R/TCGA/unaltered_samples_TCGA.txt", delim = ":", col_names = FALSE)
+unaltered_data_TCGA <- read_delim(".../unaltered_samples_TCGA.txt", delim = ":", col_names = FALSE)
 
 # Filter merged data using unaltered patient IDs
 unalt_brca1_exp_data_TCGA <- filter(merged_brca1_data_, `SAMPLE_ID` %in% unaltered_data_TCGA$X2)
@@ -131,8 +131,8 @@ unalt_brca1_exp_data_TCGA$Status <- "Unaltered"
 unalt_brca2_exp_data_TCGA$Status <- "Unaltered"
 
 # write files into folders
-write_csv(unalt_brca1_exp_data_TCGA, "/Users/benitaariaslara/Desktop/lsc586/R/TCGA/unalt_brca1_exp_data_TCGA.csv")
-write_csv(unalt_brca2_exp_data_TCGA, "/Users/benitaariaslara/Desktop/lsc586/R/TCGA/unalt_brca2_exp_data_TCGA.csv")
+write_csv(unalt_brca1_exp_data_TCGA, ".../unalt_brca1_exp_data_TCGA.csv")
+write_csv(unalt_brca2_exp_data_TCGA, "...unalt_brca2_exp_data_TCGA.csv")
 
 # combine mut and exp data
 
@@ -143,7 +143,7 @@ Full_mut_exp_data_TCGA <- bind_rows(
 )
 
 # write files into folders
-write_csv(Full_mut_exp_data_TCGA, "/Users/benitaariaslara/Desktop/lsc586/R/TCGA/Full_mut_exp_data_TCGA.csv")
+write_csv(Full_mut_exp_data_TCGA, ".../Full_mut_exp_data_TCGA.csv")
 
 
 ############### DATA SET CITATION ###################
