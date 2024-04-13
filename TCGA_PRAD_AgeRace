@@ -33,7 +33,7 @@ library(TCGAutils)
 
 ################
 ### METADATA ###
-#######################################################################
+################
 
 case_ids2 <- cases() %>%
   GenomicDataCommons::filter(~ project.project_id == "TCGA-PRAD") %>%
@@ -102,7 +102,7 @@ adjusted_vectors <- lapply(vector_list, function(vec) {
 
 # Create a data frame from adjusted vectors
 meta_df2 <- data.frame(do.call(cbind, adjusted_vectors))
-#This code checks each vector's length and pads it with NA values if needed to match the max_length. The resulting meta_df2 data frame will have uniform length for all vectors.
+#This code checks each vector's length and pads it with NA values if needed to match the max_length. 
 
 #Adjust the code based on your specific vectors and requirements.
 
