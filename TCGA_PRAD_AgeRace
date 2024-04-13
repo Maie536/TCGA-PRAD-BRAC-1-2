@@ -1,0 +1,230 @@
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+
+
+###################################################
+###       ## TCGA exploritory BRCA PRAD ##      ###
+###################################################
+
+
+# Specify which TCGA study to analyze
+study = "PRAD"
+setwd("/home/mwells11/ASex_Chr_Lab/PRAD/")
+filepath <- "/home/mwells11/ASex_Chr_Lab/PRAD/"
+
+
+counts_fname <- paste("TCGA", study, "TPM.tsv", sep = "-")
+meta_fname <- paste("TCGA", study, "METADATA.tsv", sep = "-")
+
+counts_path <- paste(filepath, counts_fname, sep = "")
+meta_path <- paste(filepath, meta_fname, sep = "")
+
+#################################################################
+
+library(GenomicDataCommons)
+library(tidyverse)
+library(TCGAutils)
+
+#hello
+#pull out case ids, project id must match or r will crash 
+# - project ID "TCGA-PRAC" for example
+
+
+################
+### METADATA ###
+#######################################################################
+
+case_ids2 <- cases() %>%
+  GenomicDataCommons::filter(~ project.project_id == "TCGA-PRAD") %>%
+  ids()
+clindat2 <- gdc_clinical(case_ids2)
+# Pull out clinical data of interest into lists
+# CLINICAL DATA LISTS WERE FOUND BY LOOKING AT GDC WEBSITE AND SEEING WHAT CLINICAL DATA ENTAILED,
+
+meta_df_clin <- clindat2
+class(meta_df_clin)
+meta_df_clin <- as.data.frame(meta_df_clin)
+
+write_tsv(
+  meta_df_clin,
+  "/home/mwells11/ASex_Chr_Lab/PRAD/TCGA_PRAD_CLINDATA.tsv",
+  na = "NA",
+  append = FALSE,
+  col_names = TRUE,
+  quote = "none",
+  eol = "\n",
+  num_threads = readr_threads(),
+  progress = show_progress()
+)
+
+mf_list_1 <- clindat2[["demographic"]][["gender"]]
+status_list_1 <- clindat2[["demographic"]][["vital_status"]]
+surv_times_1  <- clindat2[["demographic"]][["days_to_death"]]
+follow_list_1 <- clindat2[["diagnoses"]][["days_to_last_follow_up"]]
+age_list_1 <- clindat2[["demographic"]][["age_at_index"]]
+race_list_1 <- clindat2[["demographic"]][["race"]]
+tissue_list_1 <- clindat[["diagnoses"]][["tissue_or_organ_of_origin"]]
+
+
+################################################################################
+##  checking rows and vectors
+
+lengths <- sapply(list(case_ids2, mf_list_1, status_list_1, surv_times_1, follow_list_1, age_list_1, race_list_1, tissue_list_1), length)
+lengths
+max_length <- max(lengths)
+################################################################################
+
+max_length <- max(lengths)
+
+# Create a list of vectors
+vector_list <- list(
+  case_ids2,
+  mf_list_1,
+  status_list_1,
+  surv_times_1,
+  follow_list_1,
+  age_list_1,
+  race_list_1,
+  tissue_list_1
+)
+
+# Loop through the list and adjust vector lengths
+adjusted_vectors <- lapply(vector_list, function(vec) {
+  if (length(vec) < max_length) {
+    # Pad with NA to match the maximum length
+    return(c(vec, rep(NA, max_length - length(vec))))
+  } else {
+    # If length is already equal to max_length, no adjustment needed
+    return(vec)
+  }
+})
+
+# Create a data frame from adjusted vectors
+meta_df2 <- data.frame(do.call(cbind, adjusted_vectors))
+#This code checks each vector's length and pads it with NA values if needed to match the max_length. The resulting meta_df2 data frame will have uniform length for all vectors.
+
+#Adjust the code based on your specific vectors and requirements.
+
+
+
+
+
+
+
+################################################################################
+################################################################################
+
+meta_df2 <- data.frame(cbind(case_ids2, mf_list_1, status_list_1,
+                             surv_times_1, follow_list_1, age_list_1,
+                             race_list_1, tissue_list_1))
+
+
+write_tsv(
+  meta_df2,
+  "/home/mwells11/ASex_Chr_Lab/PRAD/TCGA_PRAD_METADATA.tsv",
+  na = "NA",
+  append = FALSE,
+  col_names = TRUE,
+  quote = "none",
+  eol = "\n",
+  num_threads = readr_threads(),
+  progress = show_progress()
+)
+
+
+################################################################################
+##                      WRITE PLOTS BASED ON AGE AND RACE                     ##
+################################################################################
+
+
+library(ggplot2)
+setwd("/home/mwells11/ASex_Chr_Lab/PRAD/")
+filepath <- "/home/mwells11/ASex_Chr_Lab/PRAD/"
+
+
+
+##  age_list_1 for age, mf_list_1 = reported sex
+ggplot(, aes(x = Age)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black") +
+  labs(title = "Age Distribution of Cancer Cells", x = "Age", y = "Count")
+
+
+
+
+library(ggplot2)
+
+#histogram of age and race
+
+# Read the metadata file
+metadata <- read_tsv("/home/mwells11/ASex_Chr_Lab/PRAD/TCGA_PRAD_METADATA.tsv")
+
+# Create a ggplot
+ggplot(metadata, aes(x = age_list_1, fill = race_list_1)) +
+  geom_histogram(binwidth = 5, position = "dodge", color = "black") +
+  labs(title = "Age Distribution by Race", x = "Age", y = "Count", fill = "Race") +
+  theme_minimal()
+########################################################################################################################################
+##                 USE THIS ONE          violin plot of age and race               USE THIS ONE                                       ##
+########################################################################################################################################
+
+# Read the metadata file
+metadata <- read_tsv("/home/mwells11/ASex_Chr_Lab/PRAD/TCGA_PRAD_METADATA.tsv")
+
+# Create a ggplot with violin plots
+ggplot(metadata, aes(x = race_list_1, y = age_list_1, fill = race_list_1)) +
+  geom_violin(trim = FALSE) +
+  labs(title = "Age Distribution by Race", x = "Race", y = "Age", fill = "Race") +
+  theme_minimal()
+
+#VIOlin scatter plot of age and race
+
+# Read the metadata file
+metadata <- read_tsv("/home/mwells11/ASex_Chr_Lab/PRAD/TCGA_PRAD_METADATA.tsv")
+
+# Create a ggplot with violin and scatter plot
+ggplot(metadata, aes(x = race_list_1, y = age_list_1)) +
+  geom_violin(trim = FALSE, fill = "lightblue") +
+  geom_jitter(aes(color = race_list_1), width = 0.3, alpha = 0.5) +
+  labs(title = "Age Distribution by Race", x = "Race", y = "Age", color = "Race") +
+  theme_minimal()
+
+#makes the datapoints black
+ggplot(metadata, aes(x = race_list_1, y = age_list_1)) +
+  geom_violin(trim = FALSE, fill = "lightblue") +
+  geom_jitter(color = "black", width = 0.3, alpha = 0.5) +  # Set color to black
+  labs(title = "Age Distribution by Race in Males with Prostate Cancer Diagnosis", x = "Race", y = "Age", color = "Race") +
+  theme_minimal()
+############## USING CLINDSATA #####################
+
+
+
+# Read the clinical data file
+clinical_data <- read_tsv("/home/mwells11/ASex_Chr_Lab/PRAD/TCGA_PRAD_CLINDATA.tsv")
+
+############### Create a violin plot of age, race, and main primary site ################
+ggplot(clinical_data, aes(x = diagnoses.age_at_diagnosis, y = age_list_1, fill = race_list_1)) +
+  geom_violin(trim = FALSE) +
+  labs(title = "Clinical Data: Age, Race, and Main Primary Site",
+       x = "age_at_diagnosis",
+       y = "Age",
+       fill = "Race") +
+  theme_minimal()
+
+
+
+################### Create a histogram of age ########################
+ggplot(clinical_data, aes(x = age_list_1)) +
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") +
+  labs(title = "Histogram of Age",
+       x = "Age",
+       y = "Count") +
+  theme_minimal()
+# Create a histogram of age at diagnosis
+ggplot(clinical_data, aes(x = diagnoses.age_at_diagnosis)) +
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") +
+  labs(title = "Histogram of Age at Diagnosis",
+       x = "Age at Diagnosis",
+       y = "Count") +
+  theme_minimal()
+
